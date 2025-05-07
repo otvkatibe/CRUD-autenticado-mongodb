@@ -8,7 +8,8 @@ import {
 
 export const createWorkout = async (req, res) => {
   try {
-    const { title, description, duration } = req.body;
+    const { type, description, duration } = req.body;
+    const title = req.body.title || type;
     console.log('Tentativa de criar treino:', { title, description, duration, userId: req.userId });
 
     if (!title || !description || !duration) {
