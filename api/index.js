@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
+import cors from "cors";
 import db from "./database/configdb.js";
 import userRoute from "./routes/user.route.js";
 import workoutRoute from "./routes/workout.route.js";
@@ -8,18 +9,17 @@ dotenv.config();
 db.connect();
 
 const app = express();
-const cors = require("cors");
 app.use(express.json());
-
-app.use("/", userRoute);
-app.use("/users", userRoute);
-app.use("/workouts", workoutRoute);
 
 app.use(cors({
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+app.use("/", userRoute);
+app.use("/users", userRoute);
+app.use("/workouts", workoutRoute);
 
 app.get("/", (req, res) => {
     res.send("Backend está no ar!");
