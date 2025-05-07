@@ -1,7 +1,7 @@
 {
   "name": "backend-express-mongodb",
   "version": "1.0.0",
-  "description": "Atividade avaliativa 01 - Backend em express com autenticação(JWT) e MongoDB em produção",
+  "description": "Av 03 - Crud em express em MongoDB",
   "main": "api/index.js",
   "type": "module",
   "scripts": {

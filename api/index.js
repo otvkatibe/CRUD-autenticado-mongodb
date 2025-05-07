@@ -11,12 +11,11 @@ const app = express();
 app.use(express.json());
 
 app.use("/", userRoute);
-app.use("/SecuredRoute", userRoute);
 app.use("/users", userRoute);
-app.use("/api/workouts", workoutRoute);
+app.use("/workouts", workoutRoute);
 
 app.get("/", (req, res) => {
-    res.send("Banco de dados de treinos está no ar!");
+    res.send("Backend está no ar!");
 });
 
 const PORT = process.env.PORT || 3000;

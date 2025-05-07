@@ -7,16 +7,25 @@ import {
 } from '../services/workout.services.js';
 
 export const createWorkout = async (req, res) => {
-    try{
-      const workout = await createWorkoutService({
-        ...req.body,
-        userId: req.userId
-      });
-      res.status(201).json(workout);
-    } catch (error) {
-        console.log("Erro ao criar treino:", error);
-        res.status(500).json({ message: "Erro ao criar treino" });
+  try {
+    const { title, description, duration } = req.body;
+    console.log('Tentativa de criar treino:', { title, description, duration, userId: req.userId });
+
+    if (!title || !description || !duration) {
+      return res.status(400).json({ message: 'Título, descrição e duração são obrigatórios.' });
     }
+
+    const workout = await createWorkoutService({
+      ...req.body,
+      userId: req.userId,
+    });
+    console.log('Treino criado com sucesso:', workout._id);
+
+    res.status(201).json(workout);
+  } catch (error) {
+    console.log('Erro ao criar treino:', error.message);
+    res.status(500).json({ message: 'Erro ao criar treino.' });
+  }
 };
 
 export const getWorkout = async (req, res) => {
@@ -36,11 +45,13 @@ export const getWorkoutById = async (req, res) => {
     try {
         const workout = await findWorkoutByIdAndUserId(req.params.id, req.userId);
         if (!workout) {
+            console.log('Treino não encontrado:', req.params.id);
             return res.status(404).json({ message: "Treino não encontrado" });
         }
+        console.log('Treino encontrado:', workout._id);
         res.status(200).json(workout);
     } catch (error) {
-        console.log("Erro ao obter treino:", error);
+        console.log("Erro ao obter treino:", error.message);
         res.status(500).json({ message: "Erro ao obter treino" });
     }
 }

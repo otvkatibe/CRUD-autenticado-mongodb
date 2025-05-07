@@ -8,6 +8,7 @@ import {
     deleteWorkout
 } from '../controller/workout.controller.js';
 import verifyToken from '../middlewares/jwt.token.middleware.js';
+import { validateObjectId } from '../middlewares/objeto.middleware.js';
 
 const router = express.Router();
 
@@ -15,9 +16,9 @@ router.use(verifyToken);
 
 router.post('/', createWorkout);
 router.get('/', getWorkout);
-router.get('/:id', getWorkoutById);
-router.put('/:id', updateWorkout);
-router.patch('/:id', patchWorkout);
-router.delete('/:id', deleteWorkout);
+router.get('/:id', validateObjectId, getWorkoutById);
+router.put('/:id', validateObjectId, updateWorkout);
+router.patch('/:id', validateObjectId, patchWorkout);
+router.delete('/:id', validateObjectId, deleteWorkout);
 
 export default router;
