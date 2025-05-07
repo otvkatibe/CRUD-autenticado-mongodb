@@ -1,0 +1,26 @@
+import dotenv from "dotenv";
+import express from "express";
+import db from "./database/configdb.js";
+import userRoute from "./routes/user.route.js";
+import workoutRoute from "./routes/workout.route.js";
+
+dotenv.config();   
+db.connect();
+
+const app = express();
+app.use(express.json());
+
+app.use("/", userRoute);
+app.use("/SecuredRoute", userRoute);
+app.use("/users", userRoute);
+app.use("/api/workouts", workoutRoute);
+
+app.get("/", (req, res) => {
+    res.send("Banco de dados de treinos está no ar!");
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
