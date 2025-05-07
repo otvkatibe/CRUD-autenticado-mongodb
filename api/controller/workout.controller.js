@@ -15,7 +15,6 @@ export const createWorkout = async (req, res) => {
     if (!title || !description || !duration) {
       return res.status(400).json({ message: 'Título, descrição e duração são obrigatórios.' });
     }
-
     const workout = await createWorkoutService({
       ...req.body,
       userId: req.userId,
