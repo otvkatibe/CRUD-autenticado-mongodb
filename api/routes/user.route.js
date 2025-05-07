@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.get('/users', verifyToken, getUserProfile);
+router.get('/users', getUserProfile);
 router.get('/secure', verifyToken, secureController.Endpoint);
 
 export default router;
