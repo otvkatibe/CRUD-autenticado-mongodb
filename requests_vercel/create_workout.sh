@@ -3,10 +3,10 @@
 # Script para criar um treino com uma requisição bem-sucedida
 
 # Defina a URL da API
-API_URL="http://localhost:3000/workouts"
+API_URL="https://crud-autenticado-mongodb.vercel.app/workouts"
 
 # Defina o token JWT (substitua pelo token gerado após o login)
-TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MWU2MWIwZTEwYjc3YWQ3M2ZmYmY0OSIsImlhdCI6MTc0NjgyMTU1Nn0.IfJuLtiViKNCZMwIxk6RnrVERP45LihITS-FhocLf7c"
+TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MWU2NGY1ZTJmNzUyYzhkNWNkYWFiOSIsImlhdCI6MTc0NjgyMjQzMH0.w2VCHcNrFIYpBLEixin-wZU1e9LfpoupwEZ6eHxBA6c"
 
 # Criação de um novo treino
 curl -X POST $API_URL \

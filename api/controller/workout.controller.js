@@ -37,17 +37,20 @@ export const createWorkout = async (req, res) => {
 };
 
 export const getWorkout = async (req, res) => {
-    try {
-        const workouts = await findWorkoutsByUserId(req.userId);
-        if (!workouts || workouts.length === 0) {
-            return res.status(404).json({ message: "Nenhum treino encontrado" });
-        }
-        res.status(200).json(workouts);
-    } catch (error) {
-        console.log("Erro ao listar treinos:", error);
-        res.status(500).json({ message: "Erro ao listar treinos" });
+  try {
+    // Buscar apenas os treinos do usuário autenticado
+    const workouts = await findWorkoutsByUserId(req.userId);
+
+    if (!workouts || workouts.length === 0) {
+      return res.status(404).json({ message: "Nenhum treino encontrado para este usuário." });
     }
-}
+
+    res.status(200).json(workouts);
+  } catch (error) {
+    console.log("Erro ao listar treinos:", error.message);
+    res.status(500).json({ message: "Erro ao listar treinos." });
+  }
+};
 
 export const getWorkoutById = async (req, res) => {
     try {
