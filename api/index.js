@@ -18,7 +18,6 @@ app.use(cors({
 }));
 
 app.use("/", userRoute);
-app.use("/users", userRoute);
 app.use("/workouts", workoutRoute);
 
 app.get("/", (req, res) => {

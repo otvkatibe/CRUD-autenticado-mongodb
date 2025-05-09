@@ -5,22 +5,30 @@ import {
     updateWorkoutById,
     deleteWorkoutById
 } from '../services/workout.services.js';
+import { findUserById } from '../services/user.services.js'; // Importar o serviço para buscar usuário
 
 export const createWorkout = async (req, res) => {
   try {
-    const { type, description, duration } = req.body;
-    const title = req.body.title || type;
+    const { title, description, duration } = req.body;
+
+    // Verificar se o usuário existe
+    const userExists = await findUserById(req.userId);
+    if (!userExists) {
+      return res.status(404).json({ message: 'Usuário não encontrado.' });
+    }
+
     console.log('Tentativa de criar treino:', { title, description, duration, userId: req.userId });
 
     if (!title || !description || !duration) {
       return res.status(400).json({ message: 'Título, descrição e duração são obrigatórios.' });
     }
+
     const workout = await createWorkoutService({
       ...req.body,
       userId: req.userId,
     });
-    console.log('Treino criado com sucesso:', workout._id);
 
+    console.log('Treino criado com sucesso:', workout._id);
     res.status(201).json(workout);
   } catch (error) {
     console.log('Erro ao criar treino:', error.message);

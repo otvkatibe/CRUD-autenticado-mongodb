@@ -1,5 +1,4 @@
-import { 
-    findUserById, 
+import {
     createUser, 
     findUserByEmail 
 } from '../services/user.services.js';
@@ -79,18 +78,5 @@ export const loginUser = async (req, res) => {
   } catch (error) {
     console.log('Erro ao realizar login:', error.message);
     res.status(500).json({ message: 'Erro ao realizar login.' });
-  }
-};
-
-export const getUserProfile = async (req, res) => {
-  try {
-    const user = await findUserById(req.userId);
-    if (!user) {
-      return res.status(404).json({ message: 'Usuário não encontrado.' });
-    }
-    res.status(200).json(user);
-  } catch (error) {
-    console.log('Erro ao buscar perfil do usuário:', error);
-    res.status(500).json({ message: 'Erro ao buscar perfil do usuário.' });
   }
 };
