@@ -4,44 +4,6 @@ Este projeto é uma aplicação CRUD (Create, Read, Update, Delete) que utiliza 
 
 ## Estrutura do Projeto
 
-CRUD-autenticado-mongodb
-├── api
-│   ├── controller
-│   │   ├── user.controller.js
-│   │   └── workout.controller.js
-│   ├── database
-│   │   └── configdb.js
-│   ├── middlewares
-│   │   ├── jwt.token.middleware.js
-│   │   └── objeto.middleware.js
-│   ├── models
-│   │   ├── User.js
-│   │   └── Workout.js
-│   ├── routes
-│   │   ├── user.route.js
-│   │   └── workout.route.js
-│   ├── services
-│   │   ├── user.services.js
-│   │   └── workout.services.js
-│   └── index.js
-├── requests
-│   ├── create_workout.sh
-│   ├── list_workouts.sh
-│   ├── update_workout.sh
-│   ├── delete_workout.sh
-│   ├── error_no_token.sh
-│   ├── error_invalid_token.sh
-│   ├── error_unauthorized_access.sh
-│   └── error_bad_request.sh
-├── .env
-├── .env.example
-├── .gitignore
-├── docker-compose.yml
-├── package.json
-├── README.md
-└── vercel.json
-```
-
 ## Funcionalidades
 
 ### Usuários
