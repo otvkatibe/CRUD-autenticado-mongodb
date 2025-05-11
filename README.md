@@ -4,7 +4,7 @@ Este projeto é uma aplicação CRUD (Create, Read, Update, Delete) que utiliza 
 
 # link do vídeo:
 
-## - https://drive.google.com/file/d/1jgy67tvWLpbhbcsOm9hgbjIuelrtVg_0/view?usp=sharing
+## - https://drive.google.com/file/d/1vYwh0gzUCl_CRP9HLuz404yA8y4EZqyf/view?usp=sharing
 
 ## Funcionalidades
 
