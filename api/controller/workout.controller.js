@@ -1,17 +1,10 @@
-import {
-    createWorkout as createWorkoutService,
-    findWorkoutsByUserId,
-    findWorkoutByIdAndUserId,
-    updateWorkoutById,
-    deleteWorkoutById
-} from '../services/workout.services.js';
-import { findUserById } from '../services/user.services.js'; // Importar o serviço para buscar usuário
+import { createWorkout as createWorkoutService, findWorkoutsByUserId, findWorkoutByIdAndUserId, updateWorkoutById, deleteWorkoutById } from '../services/workout.services.js';
+import { findUserById } from '../services/user.services.js';
 
 export const createWorkout = async (req, res) => {
   try {
     const { title, description, duration } = req.body;
 
-    // Verificar se o usuário existe
     const userExists = await findUserById(req.userId);
     if (!userExists) {
       return res.status(404).json({ message: 'Usuário não encontrado.' });
@@ -38,7 +31,6 @@ export const createWorkout = async (req, res) => {
 
 export const getWorkout = async (req, res) => {
   try {
-    // Buscar apenas os treinos do usuário autenticado
     const workouts = await findWorkoutsByUserId(req.userId);
 
     if (!workouts || workouts.length === 0) {

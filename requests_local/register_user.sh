@@ -1,4 +1,4 @@
-curl -X POST 0/register \
+curl -X POST http://localhost:3000/register \
 -H "Content-Type: application/json" \
 -d '{
   "name": "testuser",

@@ -2,66 +2,29 @@
 
 Este projeto é uma aplicação CRUD (Create, Read, Update, Delete) que utiliza o MongoDB como banco de dados e o Express.js como framework para o backend. A aplicação permite o gerenciamento de usuários e treinos, com autenticação via JWT.
 
-## Estrutura do Projeto
+# link do vídeo:
 
-CRUD-autenticado-mongodb
-├── api
-│   ├── controller
-│   │   ├── user.controller.js
-│   │   └── workout.controller.js
-│   ├── database
-│   │   └── configdb.js
-│   ├── middlewares
-│   │   ├── jwt.token.middleware.js
-│   │   └── objeto.middleware.js
-│   ├── models
-│   │   ├── User.js
-│   │   └── Workout.js
-│   ├── routes
-│   │   ├── user.route.js
-│   │   └── workout.route.js
-│   ├── services
-│   │   ├── user.services.js
-│   │   └── workout.services.js
-│   └── index.js
-├── requests
-│   ├── create_workout.sh
-│   ├── list_workouts.sh
-│   ├── update_workout.sh
-│   ├── delete_workout.sh
-│   ├── error_no_token.sh
-│   ├── error_invalid_token.sh
-│   ├── error_unauthorized_access.sh
-│   └── error_bad_request.sh
-├── .env
-├── .env.example
-├── .gitignore
-├── docker-compose.yml
-├── package.json
-├── README.md
-└── vercel.json
-```
+## - https://drive.google.com/file/d/1jgy67tvWLpbhbcsOm9hgbjIuelrtVg_0/view?usp=sharing
 
 ## Funcionalidades
 
 ### Usuários
-- **Registrar Usuário**: `POST /api/users/register`
-- **Login de Usuário**: `POST /api/users/login`
-- **Obter Perfil do Usuário**: `GET /api/users`
+- **Registrar Usuário**: `POST /users/register`
+- **Login de Usuário**: `POST /users/login`
 
 ### Treinos
-- **Criar Treino**: `POST /api/workouts`
-- **Listar Treinos**: `GET /api/workouts`
-- **Obter Detalhes de um Treino**: `GET /api/workouts/:id`
-- **Atualizar Treino**: `PUT /api/workouts/:id`
-- **Atualizar Parcialmente um Treino**: `PATCH /api/workouts/:id`
-- **Deletar Treino**: `DELETE /api/workouts/:id`
+- **Criar Treino**: `POST /workouts`
+- **Listar Treinos**: `GET /workouts`
+- **Obter Detalhes de um Treino**: `GET /workouts/:id`
+- **Atualizar Treino**: `PUT /workouts/:id`
+- **Atualizar Parcialmente um Treino**: `PATCH /workouts/:id`
+- **Deletar Treino**: `DELETE /workouts/:id`
 
 ## Requisitos
 - Todas as rotas exigem um token JWT válido no cabeçalho `Authorization`.
 
 ## Testes
-Scripts de exemplo para testar as rotas estão disponíveis na pasta `requests/`.
+Scripts de exemplo para testar as rotas estão disponíveis na pasta `requests_local/`.
 
 ## Casos de Erro
 - **Sem Token**: Retorna `401 Unauthorized`.
