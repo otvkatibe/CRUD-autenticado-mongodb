@@ -20,7 +20,7 @@ app.use(cors({
 app.use("/", userRoute);
 app.use("/workouts", workoutRoute);
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
     res.send("Backend está no ar!");
 });
 
@@ -29,3 +29,4 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
+export default app;

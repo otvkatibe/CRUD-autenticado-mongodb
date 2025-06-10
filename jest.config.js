@@ -33,5 +33,26 @@ export default {
     'jest': {
       useESM: true
     }
-  }
+  },
+  
+  projects: [
+    {
+      displayName: 'unit',
+      testMatch: [
+        '<rootDir>/tests/basic.test.js',
+        '<rootDir>/tests/controllers.test.js',
+        '<rootDir>/tests/middlewares.test.js',
+        '<rootDir>/tests/services.test.js',
+        '<rootDir>/tests/utils.test.js',
+        '<rootDir>/tests/validators.test.js'
+      ],
+      testPathIgnorePatterns: ['integration']
+    },
+    {
+      displayName: 'integration',
+      testMatch: [
+        '<rootDir>/tests/integration.test.js'
+      ]
+    }
+  ]
 };
