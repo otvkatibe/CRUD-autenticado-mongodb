@@ -1,99 +1,133 @@
-import { createWorkout as createWorkoutService, findWorkoutsByUserId, findWorkoutByIdAndUserId, updateWorkoutById, deleteWorkoutById } from '../services/workout.services.js';
-import { findUserById } from '../services/user.services.js';
+import { WorkoutService } from '../services/workout.service.js';
+import { UserService } from '../services/user.service.js';
+import { WorkoutValidator } from '../validators/workout.validator.js';
+import { ResponseHandler } from '../utils/response.handler.js';
+import { Logger } from '../utils/logger.js';
 
-export const createWorkout = async (req, res) => {
-  try {
-    const { title, description, duration } = req.body;
+export class WorkoutController {
+  static async createWorkout(req, res) {
+    try {
+      const { title, description, duration } = req.body;
+      const userId = req.userId;
 
-    const userExists = await findUserById(req.userId);
-    if (!userExists) {
-      return res.status(404).json({ message: 'Usuário não encontrado.' });
+      // Verificar se usuário existe
+      const userExists = await UserService.findUserById(userId);
+      if (!userExists) {
+        return ResponseHandler.notFound(res, 'Usuário não encontrado.');
+      }
+
+      // Validar dados de entrada
+      const validation = WorkoutValidator.validateCreateWorkout({ title, description, duration });
+      if (!validation.isValid) {
+        return ResponseHandler.badRequest(res, 'Dados inválidos', validation.errors);
+      }
+
+      Logger.info('Tentativa de criar treino', { title, description, duration, userId });
+
+      const workout = await WorkoutService.createWorkout({
+        title: title.trim(),
+        description: description.trim(),
+        duration,
+        userId
+      });
+
+      return ResponseHandler.created(res, workout, 'Treino criado com sucesso.');
+    } catch (error) {
+      Logger.error('Erro ao criar treino', error);
+      return ResponseHandler.error(res, 'Erro ao criar treino.');
     }
-
-    console.log('Tentativa de criar treino:', { title, description, duration, userId: req.userId });
-
-    if (!title || !description || !duration) {
-      return res.status(400).json({ message: 'Título, descrição e duração são obrigatórios.' });
-    }
-
-    const workout = await createWorkoutService({
-      ...req.body,
-      userId: req.userId,
-    });
-
-    console.log('Treino criado com sucesso:', workout._id);
-    res.status(201).json(workout);
-  } catch (error) {
-    console.log('Erro ao criar treino:', error.message);
-    res.status(500).json({ message: 'Erro ao criar treino.' });
   }
-};
 
-export const getWorkout = async (req, res) => {
-  try {
-    const workouts = await findWorkoutsByUserId(req.userId);
+  static async getWorkouts(req, res) {
+    try {
+      const userId = req.userId;
+      const workouts = await WorkoutService.findWorkoutsByUserId(userId);
 
-    if (!workouts || workouts.length === 0) {
-      return res.status(404).json({ message: "Nenhum treino encontrado para este usuário." });
+      if (!workouts || workouts.length === 0) {
+        return ResponseHandler.notFound(res, 'Nenhum treino encontrado para este usuário.');
+      }
+
+      return ResponseHandler.success(res, workouts, 'Treinos encontrados com sucesso.');
+    } catch (error) {
+      Logger.error('Erro ao listar treinos', error);
+      return ResponseHandler.error(res, 'Erro ao listar treinos.');
     }
-
-    res.status(200).json(workouts);
-  } catch (error) {
-    console.log("Erro ao listar treinos:", error.message);
-    res.status(500).json({ message: "Erro ao listar treinos." });
   }
-};
 
-export const getWorkoutById = async (req, res) => {
+  static async getWorkoutById(req, res) {
     try {
-        const workout = await findWorkoutByIdAndUserId(req.params.id, req.userId);
-        if (!workout) {
-            console.log('Treino não encontrado:', req.params.id);
-            return res.status(404).json({ message: "Treino não encontrado" });
-        }
-        console.log('Treino encontrado:', workout._id);
-        res.status(200).json(workout);
+      const { id } = req.params;
+      const userId = req.userId;
+
+      const workout = await WorkoutService.findWorkoutByIdAndUserId(id, userId);
+      if (!workout) {
+        Logger.info('Treino não encontrado', { id, userId });
+        return ResponseHandler.notFound(res, 'Treino não encontrado.');
+      }
+
+      Logger.info('Treino encontrado', { id: workout._id });
+      return ResponseHandler.success(res, workout, 'Treino encontrado com sucesso.');
     } catch (error) {
-        console.log("Erro ao obter treino:", error.message);
-        res.status(500).json({ message: "Erro ao obter treino" });
+      Logger.error('Erro ao obter treino', error);
+      return ResponseHandler.error(res, 'Erro ao obter treino.');
     }
+  }
+
+  static async updateWorkout(req, res) {
+    try {
+      const { id } = req.params;
+      const userId = req.userId;
+      const updateData = req.body;
+
+      // Validar dados de atualização
+      const validation = WorkoutValidator.validateUpdateWorkout(updateData);
+      if (!validation.isValid) {
+        return ResponseHandler.badRequest(res, 'Dados inválidos', validation.errors);
+      }
+
+      // Limpar dados de string
+      if (updateData.title) updateData.title = updateData.title.trim();
+      if (updateData.description) updateData.description = updateData.description.trim();
+
+      const workout = await WorkoutService.updateWorkoutById(id, userId, updateData);
+      if (!workout) {
+        return ResponseHandler.notFound(res, 'Treino não encontrado.');
+      }
+
+      return ResponseHandler.success(res, workout, 'Treino atualizado com sucesso.');
+    } catch (error) {
+      Logger.error('Erro ao atualizar treino', error);
+      return ResponseHandler.error(res, 'Erro ao atualizar treino.');
+    }
+  }
+
+  static async patchWorkout(req, res) {
+    // Reutilizar a mesma lógica do updateWorkout
+    return WorkoutController.updateWorkout(req, res);
+  }
+
+  static async deleteWorkout(req, res) {
+    try {
+      const { id } = req.params;
+      const userId = req.userId;
+
+      const workout = await WorkoutService.deleteWorkoutById(id, userId);
+      if (!workout) {
+        return ResponseHandler.notFound(res, 'Treino não encontrado.');
+      }
+
+      return ResponseHandler.success(res, null, 'Treino deletado com sucesso.');
+    } catch (error) {
+      Logger.error('Erro ao deletar treino', error);
+      return ResponseHandler.error(res, 'Erro ao deletar treino.');
+    }
+  }
 }
 
-export const updateWorkout = async (req, res) => {
-    try {
-        const workout = await updateWorkoutById(req.params.id, req.userId, req.body);
-        if (!workout) {
-            return res.status(404).json({ message: "Treino não encontrado" });
-        }
-        res.status(200).json(workout);
-    } catch (error) {
-        console.log("Erro ao atualizar treino:", error);
-        res.status(500).json({ message: "Erro ao atualizar treino" });
-    }
-}
-
-export const patchWorkout = async (req, res) => {
-    try {
-        const workout = await updateWorkoutById(req.params.id, req.userId, req.body);
-        if (!workout) {
-            return res.status(404).json({ message: "Treino não encontrado" });
-        }
-        res.status(200).json(workout);
-    } catch (error) {
-        console.log("Erro ao atualizar treino de forma parcial:", error);
-        res.status(500).json({ message: "Erro ao atualizar treino de forma parcial" });
-    }
-}
-
-export const deleteWorkout = async (req, res) => {
-    try {
-        const workout = await deleteWorkoutById(req.params.id, req.userId);
-        if (!workout) {
-            return res.status(404).json({ message: "Treino não encontrado" });
-        }
-        res.status(200).json({ message: "Treino deletado com sucesso" });
-    } catch (error) {
-        console.log("Erro ao deletar treino:", error);
-        res.status(500).json({ message: "Erro ao deletar treino" });
-    }
-}
+// Exportar métodos para compatibilidade
+export const createWorkout = WorkoutController.createWorkout;
+export const getWorkout = WorkoutController.getWorkouts;
+export const getWorkoutById = WorkoutController.getWorkoutById;
+export const updateWorkout = WorkoutController.updateWorkout;
+export const patchWorkout = WorkoutController.patchWorkout;
+export const deleteWorkout = WorkoutController.deleteWorkout;
